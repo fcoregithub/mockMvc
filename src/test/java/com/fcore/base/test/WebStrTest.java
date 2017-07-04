@@ -6,23 +6,33 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
+/**
+ * @RunWith 指定测试运行器
+ * @SpringBootTest 带有Spring Boot支持的引导程序
+ * @author Lenovo
+ *
+ */
 @RunWith(SpringRunner.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 public class WebStrTest {
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private MockMvc mockMvc;
 
 	@Autowired
@@ -55,7 +65,7 @@ public class WebStrTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		System.out.println("this is setUp()...");
+		logger.info("this is setUp()...");
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 	}
 
@@ -65,10 +75,11 @@ public class WebStrTest {
 	 */
 	@After
 	public void tearDown() throws Exception {
-		System.out.println("this is tearDown()...");
+		logger.info("this is tearDown()...");
 	}
 
 	@Test
+	@Rollback
 	public void add() throws Exception {
 		MultiValueMap<String, String> formData = new LinkedMultiValueMap<String, String>();
 		formData.add("str", "test001");
@@ -78,9 +89,17 @@ public class WebStrTest {
 						.params(formData).accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
-				.andDo(MockMvcResultHandlers.print()).andReturn();
-		System.out.println("==================" + result.getResponse().getContentAsString());
+				/*.andDo(MockMvcResultHandlers.print())*/
+				.andReturn();
+		logger.error("==================" + result.getResponse().getContentAsString());
 	}
 	
-	
+	/**
+	 * @Ignore 所修饰的测试方法会被测试运行器忽略
+	 */
+	/*@Ignore*/
+	@Test
+	public void testIgnore(){
+		logger.debug("================我肯定没有执行===============");
+	}
 }

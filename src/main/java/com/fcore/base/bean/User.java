@@ -16,7 +16,7 @@ public class User {
 		this.name = name;
 	}
 
-	public static void main(String[] args) throws Exception, SecurityException {
+	/*public static void main(String[] args) throws Exception, SecurityException {
 		User user = new User();
 		user.setName("张三");
 		Class clazz = user.getClass();
@@ -24,6 +24,6 @@ public class User {
 		Field field = clazz.getDeclaredField("name");
         UserFieldAnnotation myFieldAnnotation = field.getAnnotation(UserFieldAnnotation.class);
         System.out.println(myFieldAnnotation.description()+":"+user.getName());
-	}
+	}*/
 }
 
