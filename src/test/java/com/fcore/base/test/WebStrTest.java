@@ -93,9 +93,6 @@ public class WebStrTest {
 				.andReturn();
 		logger.error("==================" + result.getResponse().getContentAsString());
 	}
-	
-	
-	
 	/**
 	 * @Ignore 所修饰的测试方法会被测试运行器忽略
 	 */
